@@ -1,7 +1,6 @@
 
 var mediaList = document.createElement("ul");
 mediaList.id = 'mediaList';
-//document.body.innerHTML = "Discovered content (audio/video) will appear here as you scroll through your newsfeed."
 document.body.appendChild(mediaList);
 
 var mediaHash = {};
@@ -22,11 +21,11 @@ chrome.webRequest.onBeforeRequest.addListener(
 	if (!(mediaUrl.indexOf('video', 8) === 8)) return;
 	if (checkHash(mediaUrl)) return;
 	else addNewResource(mediaUrl);
-	console.log(mediaUrl);
   },
         {urls: ["https://*/*"]});
 
 var addNewResource = function (url) {
+	addHash(url);
 	var listItem = document.createElement("li");
 	var link = document.createElement("a");
 	link.setAttribute('href', url);
