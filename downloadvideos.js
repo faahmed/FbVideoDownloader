@@ -1,23 +1,21 @@
 
 var mediaList = document.createElement("ul");
 mediaList.id = 'mediaList';
+var listSize = 0;
 document.body.appendChild(mediaList);
-
 var mediaHash = {};
-
-var addHash = function(url){
-	mediaHash.url = true;
-};
-
-var checkHash = function(url){
-	return mediaHash[url] === true;
-};
-
-console.log('the extension works');
 
 chrome.webRequest.onBeforeRequest.addListener(
   function(details) {
 	var mediaUrl = cutoffByteRange(details.url);
+
+	if (isFull(mediaList)) {
+		var oldestLink = mediaList.getElementsByTagName('li')[0];
+  	    mediaList.removeChild(oldestLink);
+  	    removeHash(oldestLink.getElementsByTagName('a')[0].getAttribute('href'));
+  	    listSize--;
+  	}
+
 	if (!(mediaUrl.indexOf('video', 8) === 8)) return;
 	if (checkHash(mediaUrl)) return;
 	else addNewResource(mediaUrl);
@@ -33,6 +31,7 @@ var addNewResource = function (url) {
 	link.innerHTML = 'Discovered new audio/video';
 	listItem.appendChild(link);
 	mediaList.appendChild(listItem);
+	listSize++;
 };
 
 var cutoffByteRange = function(url) {
@@ -44,3 +43,18 @@ var cutoffByteRange = function(url) {
 	return newUrl;
 };
 
+var isFull = function(list) {
+	return listSize > 50;
+};
+
+var addHash = function(url){
+	mediaHash.url = true;
+};
+
+var removeHash = function(url){
+    mediaHash.url = false;
+};
+
+var checkHash = function(url){
+	return mediaHash[url] === true;
+};
