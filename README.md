@@ -20,4 +20,4 @@ and video data. There is no feasible way to merge the content in-browser, but yo
 
 <code>ffmpeg -i THE_VIDEO.mp4 -i THE_AUDIO.mp4 -acodec copy -vcodec copy -map 0:v -map 1:a OUTPUT.mp4</code>
 
-**Last updated 12/16/2016**
+**Last updated 1/28/2017**
